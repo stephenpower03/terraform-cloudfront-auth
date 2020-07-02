@@ -1,4 +1,4 @@
-variable "cloudfront_auth_brach" {
+variable "cloudfront_auth_branch" {
   type        = string
   default     = "cognito"
   description = "https://github.com/mslipets/cloudfront-auth/{branch_name} (current actual \"cognito\")"
@@ -49,7 +49,17 @@ variable "session_duration" {
 variable "authz" {
   type        = string
   default     = "1"
-  description = "The authorisation method (google, microsoft only). Mirosoft: (1) Azure AD Login (default)\n   (2) JSON Username Lookup\n\n Google: (1) Hosted Domain - verify email's domain matches that of the given hosted domain\n   (2) HTTP Email Lookup - verify email exists in JSON array located at given HTTP endpoint\n   (3) Google Groups Lookup - verify email exists in one of given Google Groups"
+  description = <<-DOC
+    A string containing an integer specifying the authorization method for auth_vendor google
+    and microsoft. This has no effect on other auth_vendors.
+    microsoft:
+      "1" Azure AD Login (default)
+      "2" JSON Username Lookup
+    google:
+      "1" Hosted Domain - verify email's domain matches that of the given hosted domain
+      "2" HTTP Email Lookup - verify email exists in JSON array located at given HTTP endpoint
+      "3" Google Groups Lookup - verify email exists in one of given Google Groups"
+    DOC
 }
 
 variable "github_organization" {
@@ -94,7 +104,6 @@ variable "cloudfront_default_root_object" {
 
 variable "cloudfront_acm_certificate_arn" {
   description = "ACM Certificate ARN for Cloudfront"
-  default     = ""
 }
 
 variable "nodejs_version" {
@@ -111,5 +120,6 @@ variable "geo_restriction_whitelisted_locations" {
 
 variable "bucket_access_roles_arn_list" {
   type        = list(string)
-  description = "A Role ARN which granted RW rights to bucket (to be used by instance profiles)"
+  default     = []
+  description = "A Role ARN which granted RW rights to bucket (to be used by instance profiles in order to upload/cleanup bucket content)"
 }
