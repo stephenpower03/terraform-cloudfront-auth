@@ -123,3 +123,8 @@ variable "bucket_access_roles_arn_list" {
   default     = []
   description = "A Role ARN which granted RW rights to bucket (to be used by instance profiles in order to upload/cleanup bucket content)"
 }
+
+variable "cloudfront_oac_name" {
+  description = "Cloudfront Origin Access Control name"
+  type        = string
+}
