@@ -181,7 +181,7 @@ resource "aws_cloudfront_origin_access_identity" "default" {
 
 resource "aws_cloudfront_distribution" "default" {
   origin {
-    domain_name = aws_s3_bucket.default.bucket_regional_domain_name
+    domain_name = var.cloudfront_oac_name
     origin_id   = local.s3_origin_id
 
     s3_origin_config {
