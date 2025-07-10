@@ -113,66 +113,6 @@ data "local_file" "build-js" {
 }
 
 #
-# S3
-#
-resource "aws_s3_bucket" "default" {
-  bucket = var.bucket_name
-  acl    = "private"
-  tags   = var.tags
-  region = var.region
-}
-
-data "aws_iam_policy_document" "s3_bucket_policy" {
-  statement {
-    actions = [
-      "s3:GetObject",
-      "s3:ListBucket"
-    ]
-
-    resources = [
-      aws_s3_bucket.default.arn,
-      "${aws_s3_bucket.default.arn}/*"
-    ]
-
-    principals {
-      type = "AWS"
-      identifiers = [
-        aws_cloudfront_origin_access_identity.default.iam_arn,
-      ]
-    }
-  }
-
-  dynamic "statement" {
-    for_each = var.bucket_access_roles_arn_list
-    iterator = arn
-    content {
-
-      actions = [
-        "s3:GetBucketLocation",
-        "s3:ListBucket",
-        "s3:GetObject",
-        "s3:PutObject"
-      ]
-
-      resources = [
-        aws_s3_bucket.default.arn,
-        "${aws_s3_bucket.default.arn}/*"
-      ]
-
-      principals {
-        type        = "AWS"
-        identifiers = [arn.value]
-      }
-    }
-  }
-}
-
-resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = aws_s3_bucket.default.id
-  policy = data.aws_iam_policy_document.s3_bucket_policy.json
-}
-
-#
 # Cloudfront
 #
 resource "aws_cloudfront_origin_access_identity" "default" {
