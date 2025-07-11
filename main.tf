@@ -116,7 +116,7 @@ data "local_file" "build-js" {
 # Cloudfront
 #
 resource "aws_cloudfront_origin_access_identity" "default" {
-  comment = var.bucket_name
+  comment = "devops-tools-dlex-release-documents.s3.eu-west-1.amazonaws.com"
 }
 
 resource "aws_cloudfront_distribution" "default" {
@@ -129,7 +129,7 @@ resource "aws_cloudfront_distribution" "default" {
     }
   }
 
-  aliases             = concat([var.cloudfront_distribution], [var.bucket_name], var.cloudfront_aliases)
+  aliases             = concat([var.cloudfront_distribution], ["devops-tools-dlex-release-documents.s3.eu-west-1.amazonaws.com"], var.cloudfront_aliases)
   comment             = "Managed by Terraform"
   default_root_object = var.cloudfront_default_root_object
   enabled             = true
