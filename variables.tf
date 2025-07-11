@@ -68,11 +68,6 @@ variable "github_organization" {
   description = "The GitHub organization. Required for GitHub auth vendor only"
 }
 
-variable "bucket_name" {
-  type        = string
-  description = "The name of your s3 bucket"
-}
-
 variable "tags" {
   type        = map(string)
   default     = {}
