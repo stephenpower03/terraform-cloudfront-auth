@@ -103,7 +103,7 @@ variable "cloudfront_acm_certificate_arn" {
 
 variable "nodejs_version" {
   type        = string
-  default     = "10.19.0"
+  default     = "18"
   description = "Node.js runtime version."
 }
 
