@@ -4,7 +4,7 @@
 resource "null_resource" "check_nvm" {
   provisioner "local-exec" {
     command = <<EOF
-    if not which nvm; then
+    if ! command -v nvm &> /dev/null; then
         echo "ERROR: nvm is not installed"
         exit 1
     fi
@@ -19,7 +19,10 @@ resource "null_resource" "provision_nodejs" {
   depends_on = [null_resource.check_nvm]
   provisioner "local-exec" {
     command = <<EOF
-    nvm install -s ${var.nodejs_version} &&\
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+    nvm install -s ${var.nodejs_version}
     nvm use ${var.nodejs_version}
 EOF
   }
@@ -44,6 +47,9 @@ if [ ! -d "build" ]; then
         --output cloudfront-auth-${var.cloudfront_auth_branch}.zip
     unzip -q cloudfront-auth-${var.cloudfront_auth_branch}.zip -d build/
     mkdir build/cloudfront-auth-${var.cloudfront_auth_branch}/distributions
+
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
     nvm use ${var.nodejs_version}
     cp ${data.local_file.build-js.filename} build/cloudfront-auth-${var.cloudfront_auth_branch}/build/build.js&&\
@@ -74,6 +80,8 @@ resource "null_resource" "build_lambda" {
 
   provisioner "local-exec" {
     command = <<EOF
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     nvm use ${var.nodejs_version}&&\
     cd build/cloudfront-auth-${var.cloudfront_auth_branch} &&\
     node build/build.js --AUTH_VENDOR=${var.auth_vendor} \
