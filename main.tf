@@ -19,8 +19,10 @@ resource "null_resource" "provision_nodejs" {
   depends_on = [null_resource.check_nvm]
   provisioner "local-exec" {
     command = <<EOF
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+    
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 
     nvm install -s ${var.nodejs_version}
     nvm use ${var.nodejs_version}
@@ -48,8 +50,10 @@ if [ ! -d "build" ]; then
     unzip -q cloudfront-auth-${var.cloudfront_auth_branch}.zip -d build/
     mkdir build/cloudfront-auth-${var.cloudfront_auth_branch}/distributions
 
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
 
     nvm use ${var.nodejs_version}
     cp ${data.local_file.build-js.filename} build/cloudfront-auth-${var.cloudfront_auth_branch}/build/build.js&&\
@@ -80,8 +84,11 @@ resource "null_resource" "build_lambda" {
 
   provisioner "local-exec" {
     command = <<EOF
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+
     export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+    
     nvm use ${var.nodejs_version}&&\
     cd build/cloudfront-auth-${var.cloudfront_auth_branch} &&\
     node build/build.js --AUTH_VENDOR=${var.auth_vendor} \
