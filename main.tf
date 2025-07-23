@@ -84,13 +84,12 @@ resource "null_resource" "build_lambda" {
 
   provisioner "local-exec" {
     command = <<EOF
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-    
-    nvm use ${var.nodejs_version}&&\
-    cd build/cloudfront-auth-${var.cloudfront_auth_branch} &&\
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
+    export NVM_DIR="$HOME/.nvm" && \
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && \
+    nvm install ${var.nodejs_version} && \
+    nvm use ${var.nodejs_version} && \
+    cd build/cloudfront-auth-${var.cloudfront_auth_branch} && \
     node build/build.js --AUTH_VENDOR=${var.auth_vendor} \
     --BASE_URL=${var.base_uri} \
     --CLOUDFRONT_DISTRIBUTION=${var.cloudfront_distribution} \
