@@ -166,3 +166,8 @@ tags
 .idea/misc.xml
 .idea/modules.xml
 .idea/vcs.xml
+
+# Node modules
+node_modules/
+package-lock.json
+package.json
