@@ -150,7 +150,7 @@ function cognitoConfiguration() {
 
     fs.writeFileSync('distributions/' + config.DISTRIBUTION + '/config.json', JSON.stringify(result, null, 4));
 
-    shell.cp('./authz/okta.js', './distributions/' + config.DISTRIBUTION + '/auth.js');
+    shell.cp('./auth.js', './distributions/' + config.DISTRIBUTION + '/auth.js');
     writeConfig(config, zip, ['config.json', 'index.js', 'auth.js', 'nonce.js']);
   });
 }
