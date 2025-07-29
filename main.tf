@@ -131,8 +131,12 @@ data "local_file" "build-js" {
 #
 # Cloudfront
 #
-resource "aws_cloudfront_origin_access_identity" "default" {
-  comment = "devops-tools-dlex-release-documents.s3.eu-west-1.amazonaws.com"
+resource "aws_cloudfront_origin_access_control" "default" {
+  name                              = "dlex-documents-oac"
+  description                       = "OAC for DLEX release documents"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_distribution" "default" {
@@ -140,9 +144,7 @@ resource "aws_cloudfront_distribution" "default" {
     domain_name = var.cloudfront_oac_name
     origin_id   = local.s3_origin_id
 
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
-    }
+    origin_access_control_id = aws_cloudfront_origin_access_control.default.id
   }
 
   aliases             = concat([var.cloudfront_distribution], var.cloudfront_aliases)
