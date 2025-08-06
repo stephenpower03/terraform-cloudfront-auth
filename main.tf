@@ -149,7 +149,6 @@ resource "aws_cloudfront_distribution" "default" {
 
   aliases             = concat([var.cloudfront_distribution], var.cloudfront_aliases)
   comment             = "Managed by Terraform"
-  default_root_object = var.cloudfront_default_root_object
   enabled             = true
   http_version        = "http2"
   is_ipv6_enabled     = true
