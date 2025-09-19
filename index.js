@@ -106,7 +106,7 @@ function mainProcess(event, context, callback) {
 
     // Verify code is in querystring
     if (!queryDict.code) {
-        unauthorized('No Code Found', '', '', callback);
+      unauthorized('No Code Found', '', '', callback);
     }
     
     // build a per-request copy (don’t mutate global config)
@@ -116,11 +116,11 @@ function mainProcess(event, context, callback) {
     
     // always compute Basic from original config if secret exists
     if (config.TOKEN_REQUEST.client_secret) {
-        const basic = Buffer.from(
-        `${config.TOKEN_REQUEST.client_id}:${config.TOKEN_REQUEST.client_secret}`,
-        'utf8'
-        ).toString('base64');
-        options.headers['Authorization'] = `Basic ${basic}`;
+      const basic = Buffer.from(
+      `${config.TOKEN_REQUEST.client_id}:${config.TOKEN_REQUEST.client_secret}`,
+      'utf8'
+      ).toString('base64');
+      options.headers['Authorization'] = `Basic ${basic}`;
     }
     
     // remove client_secret only from this request body copy
