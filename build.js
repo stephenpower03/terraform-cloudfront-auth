@@ -145,7 +145,7 @@ function cognitoConfiguration() {
 
     config.AUTHZ = "COGNITO";
 
-    shell.cp('./authn/openid.index.js', './distributions/' + config.DISTRIBUTION + '/index.js');
+    shell.cp('./index.js', './distributions/' + config.DISTRIBUTION + '/index.js');
     shell.cp('./nonce.js', './distributions/' + config.DISTRIBUTION + '/nonce.js');
 
     fs.writeFileSync('distributions/' + config.DISTRIBUTION + '/config.json', JSON.stringify(result, null, 4));

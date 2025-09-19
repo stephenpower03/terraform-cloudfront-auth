@@ -59,6 +59,7 @@ if [ ! -d "build" ]; then
     nvm use ${var.nodejs_version}
     cp ${data.local_file.build-js.filename} build/cloudfront-auth-${var.cloudfront_auth_branch}/build/build.js && \
     cp ${path.module}/auth.js build/cloudfront-auth-${var.cloudfront_auth_branch}/auth.js && \
+    cp ${path.module}/index.js build/cloudfront-auth-${var.cloudfront_auth_branch}/index.js && \
     cd build/cloudfront-auth-${var.cloudfront_auth_branch} && npm i minimist shelljs && npm install && cd build && npm install
   fi
 fi
